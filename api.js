@@ -1,6 +1,6 @@
 // ========================================
 // API DE INTELIGENCIA ARTIFICIAL
-// Social Media AI Generator - VERSIÓN CORREGIDA
+// Social Media AI Generator - NICHOS 2026
 // ========================================
 
 class AIService {
@@ -12,7 +12,7 @@ class AIService {
     init() {
         const config = getStoredConfig();
         this.apiKey = config.openaiKey;
-        console.log('✅ AI Service - Generador Profesional (FIXED)');
+        console.log('✅ AI Service - Nichos Populares 2026 Cargados');
         return true;
     }
 
@@ -24,16 +24,14 @@ class AIService {
         const posts = [];
         this.usedVariations.clear();
         
-        // CORREGIDO: Generar la cantidad EXACTA que el usuario pidió
         for (let i = 0; i < quantity; i++) {
-            // Usar un formato aleatorio de los seleccionados
             const format = formats[i % formats.length];
             const post = this.generateProfessionalContent(idea, tone, format, i);
             posts.push(post);
         }
 
         await this.delay(800);
-        console.log(`✅ ${posts.length} posts generados (exactamente lo que pediste)`);
+        console.log(`✅ ${posts.length} posts generados`);
         return posts;
     }
 
@@ -53,16 +51,26 @@ class AIService {
 
     detectTopic(idea) {
         const topics = {
-            psicologia: ['psicolog', 'mental', 'emoci', 'ansiedad', 'estres', 'terapia', 'cerebro', 'mente'],
-            productividad: ['productiv', 'tiempo', 'organizacion', 'eficien', 'habitos', 'metas'],
-            tecnologia: ['tecnolog', 'app', 'software', 'digital', 'programacion', 'ia', 'codigo'],
-            negocios: ['negocio', 'emprendimiento', 'startup', 'ventas', 'marketing', 'empresa'],
-            salud: ['salud', 'ejercicio', 'fitness', 'nutricion', 'dieta', 'bienestar'],
-            educacion: ['educacion', 'aprender', 'estudio', 'enseñar', 'curso', 'tutorial'],
-            motivacion: ['motivacion', 'inspiracion', 'exito', 'superacion', 'logros'],
-            redes_sociales: ['redes sociales', 'instagram', 'tiktok', 'facebook', 'contenido', 'social media'],
-            finanzas: ['dinero', 'ahorro', 'inversion', 'finanzas', 'presupuesto'],
-            futbol: ['futbol', 'soccer', 'deporte', 'entrenamiento', 'jugador', 'tecnica']
+            // TOP NICHOS 2026
+            salud_mental: ['salud mental', 'bienestar', 'ansiedad', 'estres', 'mindfulness', 'autocuidado', 'terapia', 'emociones'],
+            fitness: ['fitness', 'gym', 'ejercicio', 'musculo', 'peso', 'entrenamiento', 'workout', 'transformacion'],
+            ia_tecnologia: ['ia', 'inteligencia artificial', 'tecnologia', 'app', 'software', 'gadget', 'innovacion', 'chatgpt'],
+            comida: ['comida', 'receta', 'cocina', 'chef', 'gastronomia', 'food', 'plato', 'ingrediente'],
+            finanzas: ['finanzas', 'dinero', 'ahorro', 'inversion', 'crypto', 'trading', 'presupuesto', 'economia'],
+            viajes: ['viaje', 'turismo', 'destino', 'aventura', 'viajar', 'mochilero', 'travel', 'pais'],
+            moda: ['moda', 'outfit', 'estilo', 'ropa', 'fashion', 'tendencia', 'look', 'vestir'],
+            diy: ['diy', 'manualidad', 'craft', 'proyecto', 'hacer', 'tutorial', 'paso a paso'],
+            mascotas: ['mascota', 'perro', 'gato', 'animal', 'pet', 'cachorro', 'veterinaria'],
+            gaming: ['gaming', 'videojuego', 'gamer', 'juego', 'esport', 'stream', 'twitch'],
+            sustentabilidad: ['sustentabilidad', 'ecologico', 'verde', 'reciclaje', 'planeta', 'ambiente', 'eco'],
+            educacion: ['educacion', 'aprender', 'tutorial', 'curso', 'enseñar', 'estudio', 'clase'],
+            entretenimiento: ['meme', 'humor', 'comedia', 'divertido', 'risa', 'viral', 'trend'],
+            emprendimiento: ['emprendimiento', 'negocio', 'startup', 'freelance', 'side hustle', 'monetizar'],
+            hogar: ['hogar', 'decoracion', 'casa', 'deco', 'interior', 'diseño', 'mueble'],
+            
+            // CLÁSICOS
+            productividad: ['productividad', 'tiempo', 'organizacion', 'eficiencia', 'habitos', 'metas'],
+            motivacion: ['motivacion', 'inspiracion', 'exito', 'superacion', 'logros', 'mentalidad']
         };
 
         for (const [topic, keywords] of Object.entries(topics)) {
@@ -73,37 +81,131 @@ class AIService {
 
     generateProfessionalTitle(idea, tone, tema, index) {
         const titles = {
-            psicologia: [
-                `💭 "Conocerse a uno mismo es el principio de toda sabiduría"`,
-                `🧠 La verdad que nadie te dice sobre la mente humana`,
-                `✨ El secreto de las personas emocionalmente inteligentes`,
-                `🎯 Por qué tu cerebro te sabotea (y cómo evitarlo)`,
-                `💡 La ciencia oculta detrás de tus pensamientos`,
-                `🔮 Lo que los psicólogos no quieren que sepas`
+            salud_mental: [
+                `🧠 Por qué cuidar tu salud mental ya no es opcional`,
+                `✨ 3 técnicas de mindfulness que cambiarán tu día`,
+                `💭 Lo que nadie te dice sobre la ansiedad`,
+                `🌱 Autocuidado: No es egoísmo, es supervivencia`,
+                `🧘 Cómo resetear tu mente en 5 minutos`
+            ],
+            fitness: [
+                `💪 Mi transformación fitness en 90 días`,
+                `🔥 5 ejercicios que queman más calorías que correr`,
+                `🏋️ Por qué no ves resultados en el gym`,
+                `⚡ El secreto de las personas que SÍ logran su cuerpo ideal`,
+                `🎯 Fitness sin excusas: La guía definitiva`
+            ],
+            ia_tecnologia: [
+                `🤖 Cómo la IA está cambiando TODO en 2026`,
+                `📱 Gadgets que necesitas este año`,
+                `💻 ChatGPT vs otras IAs: ¿Cuál elegir?`,
+                `⚡ Tecnología que parece del futuro pero ya existe`,
+                `🔮 5 apps de IA que debes probar HOY`
+            ],
+            comida: [
+                `🍜 Receta viral que TIENES que probar`,
+                `👨‍🍳 Cómo cocinar como un chef en 15 minutos`,
+                `🥗 Meal prep saludable para toda la semana`,
+                `🔥 El secreto de los restaurantes revelado`,
+                `🍕 Trucos de cocina que cambiarán tu vida`
+            ],
+            finanzas: [
+                `💰 Cómo ahorré $10,000 en 6 meses`,
+                `📈 Invertir para principiantes: Guía 2026`,
+                `💳 Los errores financieros que te mantienen pobre`,
+                `🤑 Side hustles que SÍ funcionan`,
+                `📊 Finanzas personales: Lo que NO te enseñaron`
+            ],
+            viajes: [
+                `✈️ Viajé a 10 países con $2000`,
+                `🌍 Destinos baratos que parecen caros`,
+                `🎒 Guía completa para mochileros principiantes`,
+                `🏝️ Paraísos escondidos que nadie conoce`,
+                `📸 Tips para viajar y crear contenido épico`
+            ],
+            moda: [
+                `👗 Outfits trendy sin gastar de más`,
+                `✨ Cómo encontrar tu estilo personal`,
+                `🔥 Tendencias 2026 que SÍ vale la pena seguir`,
+                `👟 Combos de ropa que siempre funcionan`,
+                `💎 Moda sostenible: Se ve bien, hace bien`
+            ],
+            diy: [
+                `🎨 DIY que parece profesional pero es fácil`,
+                `✂️ Transforma tu cuarto con $50`,
+                `🔨 Proyectos DIY para el fin de semana`,
+                `💡 Ideas creativas para decorar gastando poco`,
+                `🎁 Regalos hechos a mano que impresionan`
+            ],
+            mascotas: [
+                `🐶 Lo que tu perro intenta decirte`,
+                `🐱 Mitos sobre gatos que debes dejar de creer`,
+                `🐾 Cuidados esenciales que todo dueño debe saber`,
+                `❤️ La ciencia detrás del amor de tu mascota`,
+                `😂 Fails de mascotas que te harán el día`
+            ],
+            gaming: [
+                `🎮 Los mejores juegos de 2026 hasta ahora`,
+                `🏆 Cómo mejorar tu aim en FPS`,
+                `💰 Cómo vivir del gaming (guía real)`,
+                `🕹️ Setup gamer con presupuesto`,
+                `🔥 Estrategias pro que cambian el juego`
+            ],
+            sustentabilidad: [
+                `🌱 Pequeños cambios, gran impacto ambiental`,
+                `♻️ Cómo reducir tu huella de carbono HOY`,
+                `🌍 Vida eco-friendly sin morir en el intento`,
+                `💚 Productos sustentables que realmente funcionan`,
+                `🌿 Ser verde está de moda (y es necesario)`
+            ],
+            educacion: [
+                `📚 Aprende esto en 2026 y agrádeceme después`,
+                `🎓 Cursos gratis que valen más que una carrera`,
+                `💡 Cómo aprender cualquier cosa 10x más rápido`,
+                `🧠 Técnicas de estudio respaldadas por ciencia`,
+                `📖 Skills del futuro que debes dominar`
+            ],
+            entretenimiento: [
+                `😂 El meme que resume febrero 2026`,
+                `🔥 Trends de TikTok que tienes que conocer`,
+                `💀 Plot twist que nadie vio venir`,
+                `🎬 Series y películas que están rompiendo`,
+                `🤣 Humor del internet que solo los de 2026 entenderán`
+            ],
+            emprendimiento: [
+                `💼 Cómo empecé mi negocio con $100`,
+                `📱 Monetiza tu contenido en 2026`,
+                `🚀 De 0 a 10k seguidores: Mi estrategia`,
+                `💰 Side hustles que generan ingresos pasivos`,
+                `🎯 Emprender sin renunciar a tu trabajo`
+            ],
+            hogar: [
+                `🏡 Transforma tu espacio con poco presupuesto`,
+                `🛋️ Tendencias de decoración 2026`,
+                `✨ Trucos de diseñadores de interiores`,
+                `🎨 DIY home decor que parece caro`,
+                `💡 Ideas para espacios pequeños`
             ],
             productividad: [
-                `⚡ El método que cambió mi vida en 30 días`,
-                `🚀 Por qué trabajas tanto y logras tan poco`,
-                `💎 El secreto de las personas más productivas del mundo`,
-                `🎯 Deja de perder tiempo: La fórmula definitiva`,
-                `🔥 Multiplica tu productividad sin trabajar más horas`,
-                `⏰ El sistema que usan los CEO para ser imparables`
+                `⚡ Cómo hago en 4 horas lo que otros en 8`,
+                `🎯 El método que multiplicó mi productividad`,
+                `📊 Apps de productividad que SÍ funcionan`,
+                `🔥 Elimina distracciones de una vez por todas`,
+                `💪 Productividad sin burnout`
             ],
             motivacion: [
-                `💪 "El éxito no es el final, el fracaso no es fatal"`,
-                `🔥 La diferencia entre soñar y lograr`,
-                `⚡ Por qué las personas exitosas piensan diferente`,
-                `✨ El secreto que cambió mi mentalidad para siempre`,
-                `🎯 No es talento, es disciplina`,
-                `🌟 Tu mente es tu única limitación`
+                `💪 Deja de postergar tu vida`,
+                `🔥 La motivación que necesitas HOY`,
+                `✨ Tu única limitación eres tú mismo`,
+                `🎯 El fracaso es parte del éxito`,
+                `⚡ Actúa ahora, agradécete después`
             ],
             general: [
-                `💡 La verdad que necesitas escuchar hoy`,
-                `✨ Esto cambiará tu perspectiva para siempre`,
-                `🎯 Lo que nadie te dice sobre el éxito`,
+                `💡 Lo que necesitas escuchar hoy`,
+                `✨ Esto cambiará tu perspectiva`,
+                `🎯 Una verdad incómoda pero necesaria`,
                 `🔥 El secreto está en tu mentalidad`,
-                `💭 Una verdad incómoda pero necesaria`,
-                `🚀 Deja de buscar excusas y empieza a actuar`
+                `🚀 Deja de buscar excusas`
             ]
         };
 
@@ -113,72 +215,60 @@ class AIService {
 
     generateProfessionalBody(idea, tone, tema, index) {
         const contents = {
-            psicologia: [
-                // POST 1
-                `"Conocerse a uno mismo es el principio de toda sabiduría." — Aristóteles\n\n🧠 La autoconciencia no es un destino, es un viaje continuo.\n\nLo que descubrí:\n→ Tus pensamientos no son hechos\n→ Las emociones son mensajeros, no enemigos\n→ El autoconocimiento es tu superpoder\n\n💬 ¿Cuándo fue la última vez que te preguntaste: "¿Qué siento realmente?"`,
+            salud_mental: [
+                `Tu salud mental es tan importante como la física.\n\nDatos 2026:\n→ 1 de cada 3 personas sufre ansiedad\n→ El burnout es oficial enfermedad\n→ Mindfulness reduce estrés en 40%\n\n💡 Cuida tu mente = Cuida tu vida\n\n🧠 ¿Cómo está tu salud mental hoy?`,
                 
-                // POST 2
-                `"No vemos las cosas como son, las vemos como somos nosotros." — Anónimo\n\n🎭 Cada persona percibe la realidad desde sus propias heridas, miedos y esperanzas.\n\nPor eso:\n✓ Dos personas viven la misma situación de forma diferente\n✓ Tu pasado influye en cómo interpretas el presente\n✓ Cambiar tu mirada, cambia tu realidad\n\n💭 ¿Estás viendo la situación real o tu interpretación de ella?`,
+                `La ansiedad no es debilidad.\nEs tu cuerpo pidiendo atención.\n\nSeñales:\n✓ Pensamientos acelerados\n✓ Tensión muscular\n✓ Problemas para dormir\n\n🌱 Pedir ayuda es fortaleza.\n\n💭 No estás solo en esto.`,
                 
-                // POST 3
-                `"Aquello a lo que te resistes, persiste." — Carl Jung\n\n⚠️ Huir de tus emociones no las elimina, las amplifica.\n\nLo que Jung descubrió:\n• Negar el dolor lo convierte en sufrimiento\n• Aceptar no significa resignarse\n• La integración de la sombra te libera\n\n🔓 La sanación comienza cuando dejas de huir de ti mismo.`,
-                
-                // POST 4
-                `"El sí mismo no es algo que uno encuentra, sino algo que uno crea." — Thomas Szasz\n\n🎨 No estás buscando "tu verdadero yo".\nEstás construyéndolo cada día.\n\nLa diferencia:\n→ No eres tus circunstancias\n→ Eres tus decisiones\n→ Cada elección te define\n\n💪 Deja de buscar quién eres y empieza a crear quien quieres ser.`,
-                
-                // POST 5
-                `"La buena vida es un proceso, no un estado del ser." — Carl Rogers\n\n🌱 No existe un punto de llegada llamado "felicidad permanente".\n\nLa verdad:\n✨ La vida es una serie de momentos\n✨ El crecimiento nunca termina\n✨ La imperfección es parte del proceso\n\n💬 ¿Y si dejas de buscar la perfección y empiezas a vivir el presente?`,
-                
-                // POST 6
-                `"Lo que niegas te somete, lo que aceptas te transforma." — Carl Jung\n\n🔄 La paradoja del cambio:\nSolo puedes transformar lo que primero aceptas.\n\nPor qué funciona:\n→ La resistencia alimenta el problema\n→ La aceptación crea espacio para el cambio\n→ La transformación nace de la compasión\n\n🦋 Acepta donde estás para llegar donde quieres.`,
-                
-                // POST 7
-                `"Mis errores no me definen, mi capacidad de levantarme sí." — Anónimo\n\n💪 El fracaso no es el final, es información.\n\nCambia tu perspectiva:\n• Error = Aprendizaje\n• Caída = Oportunidad de levantarte más fuerte\n• Fracaso = Paso hacia el éxito\n\n🔥 No es cuántas veces caes, es cuántas te levantas.`,
-                
-                // POST 8
-                `"La mente es como un paracaídas: solo funciona si se abre." — Albert Einstein\n\n🧠 Una mente cerrada es una prisión autoimpuesta.\n\nCómo abrirla:\n→ Cuestiona tus creencias\n→ Escucha perspectivas diferentes\n→ Acepta que puedes estar equivocado\n\n✨ La flexibilidad mental es inteligencia.`,
-                
-                // POST 9
-                `"La confianza más valiosa es la que debemos tener en nosotros mismos." — Anónimo\n\n🎯 Nadie vendrá a salvarte.\nTú eres tu propio héroe.\n\nDesarrolla autoconfianza:\n✓ Cumple las promesas que te haces\n✓ Celebra tus pequeñas victorias\n✓ Aprende de tus errores sin juzgarte\n\n💎 La confianza se construye, no se encuentra.`,
-                
-                // POST 10
-                `"La aceptación no es resignación, sino el primer paso hacia el aprendizaje." — Anónimo\n\n🌊 Acepta la realidad actual sin juzgarla.\n\nNo es rendirse, es:\n• Reconocer lo que ES\n• Dejar de luchar contra lo inevitable\n• Crear espacio para el cambio real\n\n🦋 La transformación comienza con la aceptación.`
+                `Mindfulness de 5 minutos:\n\n1. Cierra los ojos\n2. Respira profundo (4-7-8)\n3. Observa sin juzgar\n4. Vuelve al presente\n\n🧘 Practica diario.\n\n✨ Tu mente te lo agradecerá.`
             ],
-
-            productividad: [
-                `⚡ El 80% de tus resultados viene del 20% de tus acciones.\n\nLey de Pareto aplicada:\n\n🎯 Identifica ese 20% crítico\n🎯 Elimina el 80% de ruido\n🎯 Enfócate como un láser\n\nResultado:\n→ Menos esfuerzo\n→ Más impacto\n→ Mayor libertad\n\n💬 ¿Estás trabajando duro o trabajando inteligente?`,
+            
+            fitness: [
+                `No necesitas un gym caro.\nNecesitas constancia.\n\nMi rutina:\n→ 30 min diarios\n→ 0 equipo\n→ 100% resultados\n\n💪 En 90 días cambié mi vida.\n\n🔥 ¿Empezamos hoy?`,
                 
-                `🚀 Los más exitosos no hacen más cosas.\nHacen menos cosas, pero mejor.\n\nLa trampa de la productividad:\n❌ Hacer 10 cosas mal\n✅ Hacer 3 cosas excelente\n\nCambia tu enfoque:\n→ Calidad > Cantidad\n→ Profundidad > Amplitud\n→ Impacto > Actividad\n\n⚡ Menos es más cuando se trata de lo correcto.`,
+                `Los 5 ejercicios definitivos:\n\n1. Burpees (cuerpo completo)\n2. Planchas (core)\n3. Sentadillas (piernas)\n4. Flexiones (pecho)\n5. Mountain climbers (cardio)\n\n⚡ 15 min = Todo lo que necesitas\n\n💪 Sin excusas.`,
                 
-                `💎 "No es lo que haces ocasionalmente lo que te define, es lo que haces consistentemente."\n\nSistema > Motivación\n\nPor qué:\n• La motivación es temporal\n• Los sistemas son permanentes\n• Los hábitos superan la fuerza de voluntad\n\n🔥 Crea sistemas que funcionen incluso cuando no tengas ganas.`,
-                
-                `⏰ "El tiempo es lo más valioso que tienes. Gástalo sabiamente."\n\nTécnica de bloqueo de tiempo:\n\n📍 Divide tu día en bloques\n📍 Asigna tareas específicas\n📍 Elimina interrupciones\n\n💡 Tu calendario = Tu vida. Protégelo.`,
-                
-                `🔥 La regla de los 2 minutos:\n\nSi toma menos de 2 minutos, hazlo ahora.\n\nBeneficios:\n→ Evita acumulación de tareas pequeñas\n→ Genera momentum\n→ Libera tu mente\n\n⚡ Las pequeñas acciones inmediatas crean grandes resultados.`
+                `Por qué no ves resultados:\n\n❌ Entrenar random\n❌ No descansar\n❌ Mala nutrición\n\n✅ Plan estructurado\n✅ Dormir 7-8h\n✅ Déficit calórico\n\n🎯 La constancia vence talento.`
             ],
-
-            motivacion: [
-                `💪 "El éxito no es el final, el fracaso no es fatal: es el coraje para continuar lo que cuenta." — Churchill\n\nLa verdad:\n→ El fracaso es feedback\n→ El éxito es un momento\n→ La constancia es el verdadero triunfo\n\n🔥 Levántate una vez más de las que caes.`,
+            
+            ia_tecnologia: [
+                `La IA en 2026 es OTRA COSA.\n\nLo que puedes hacer:\n→ Generar videos con texto\n→ Clonar tu voz\n→ Automatizar tareas\n→ Crear arte en segundos\n\n🤖 El futuro es HOY.\n\n💻 ¿Ya usas IA?`,
                 
-                `⚡ Tus pensamientos crean tu realidad.\nTus palabras crean tu destino.\nTus acciones crean tu vida.\n\nLa fórmula:\n1. Cambia tus pensamientos\n2. Cambia tus palabras\n3. Cambia tus acciones\n4. Cambia tu vida\n\n💬 ¿Qué estás creando hoy?`,
+                `Gadgets 2026 que necesitas:\n\n1. Auriculares con IA traductor\n2. Reloj con monitoreo avanzado\n3. Gafas AR para trabajo\n4. Cargador inalámbrico universal\n\n📱 Tecnología que mejora tu vida.\n\n⚡ Invierte en ti.`,
                 
-                `🎯 "La disciplina es el puente entre metas y logros." — Jim Rohn\n\nNo es talento.\nNo es suerte.\nNo es conexiones.\n\nEs levantarte cada día y hacer el trabajo.\n\n💪 La disciplina supera la motivación 100 veces.`,
-                
-                `🔥 "No esperes el momento perfecto. Crea el momento perfecto."\n\nLa diferencia entre soñar y lograr:\n→ Acción\n→ Constancia\n→ Decisión\n\n💪 Empieza ahora, perfecciona en el camino.`,
-                
-                `✨ "Tu única limitación es la que tú mismo te impones."\n\nRompe tus límites:\n• Cuestiona tus creencias limitantes\n• Sal de tu zona de confort\n• Actúa a pesar del miedo\n\n🚀 El potencial está dentro de ti.`
+                `ChatGPT vs Claude vs Gemini:\n\nChatGPT: Creativo, conversacional\nClaude: Análisis profundo\nGemini: Multimodal\n\n🔥 Usa los 3 según necesidad.\n\n🤖 La IA es tu asistente personal.`
             ],
-
+            
+            comida: [
+                `Receta viral: Pasta Feta TikTok\n\nIngredientes:\n• Tomates cherry\n• Queso feta\n• Pasta\n• Ajo + aceite oliva\n\n👨‍🍳 Horno 30 min, mezcla y ¡listo!\n\n🔥 Sabor increíble.\n\n🍝 ¿Ya la probaste?`,
+                
+                `Meal prep domingo:\n\nPreparas:\n→ Pollo al horno x4\n→ Arroz x4\n→ Verduras x4\n\n📦 Separas en tuppers\n💰 Ahorras tiempo y dinero\n\n🥗 Come sano toda la semana.`,
+                
+                `Trucos de chef profesional:\n\n1. Sal al final (resalta sabor)\n2. Ajo picado vs prensado (diferente intensidad)\n3. Descansar la carne (jugosa)\n4. Mise en place (todo listo antes)\n\n👨‍🍳 Cocina como pro.`
+            ],
+            
+            finanzas: [
+                `Cómo ahorré $10,000 en 6 meses:\n\n1. Presupuesto estricto 50/30/20\n2. Eliminar suscripciones\n3. Comida casera\n4. Ingresos extra (freelance)\n\n💰 Disciplina > Motivación\n\n📈 Tu yo futuro te agradecerá.`,
+                
+                `Invertir 101 (2026):\n\n→ Fondos indexados (bajo riesgo)\n→ Crypto (alto riesgo)\n→ Bienes raíces (largo plazo)\n\n📊 Diversifica siempre.\n💡 Invierte lo que puedas perder.\n\n🚀 Empieza HOY.`,
+                
+                `Errores que te mantienen pobre:\n\n❌ Gastar antes de ahorrar\n❌ Deudas de tarjetas\n❌ No tener fondo de emergencia\n\n✅ Ahorra primero\n✅ Paga deudas\n✅ 6 meses de gastos guardados\n\n💰 Educación financiera es poder.`
+            ],
+            
+            viajes: [
+                `Viajé a 10 países con $2000:\n\nTrucos:\n→ Vuelos low-cost\n→ Hostales\n→ Comida local\n→ Caminar (no taxis)\n\n✈️ Viajar barato SÍ es posible.\n\n🌍 La experiencia no tiene precio.`,
+                
+                `Destinos baratos 2026:\n\n1. 🇻🇳 Vietnam ($30/día)\n2. 🇵🇹 Portugal ($50/día)\n3. 🇲🇽 México ($40/día)\n4. 🇹🇭 Tailandia ($35/día)\n\n🏝️ Paraísos accesibles.\n\n✈️ ¿Cuál visitarás?`,
+                
+                `Mochilero principiante:\n\n✓ Mochila 40L (no maleta)\n✓ Seguro de viaje\n✓ Tarjeta sin comisiones\n✓ Apps: Maps.me, Hostelworld\n\n🎒 Menos es más.\n\n🌏 La aventura te espera.`
+            ],
+            
+            // Continúa para todos los demás temas...
+            
             general: [
-                `💡 "Lo que haces hoy puede mejorar todos tus mañanas." — Ralph Marston\n\nCada acción cuenta.\nCada decisión importa.\nCada día es una nueva oportunidad.\n\n✨ El futuro se construye en el presente.`,
+                `Lo que haces hoy define tu mañana.\n\nCada decisión cuenta.\nCada acción importa.\n\nNo postergues tu vida.\n\n✨ El momento es AHORA.`,
                 
-                `🔥 No esperes el momento perfecto.\nCrea el momento perfecto.\n\nLa diferencia entre soñar y lograr:\n→ Acción\n→ Constancia\n→ Decisión\n\n💪 Empieza ahora.`,
-                
-                `✨ "El mejor momento para plantar un árbol fue hace 20 años.\nEl segundo mejor momento es ahora." — Proverbio chino\n\n⏰ Deja de postergar tu vida.`,
-                
-                `🎯 "El cambio es difícil al principio, caótico en el medio y hermoso al final."\n\nNo te rindas en medio del caos.\n\n💪 La transformación toma tiempo.`,
-                
-                `💭 "La vida no se trata de encontrarte a ti mismo, se trata de crearte a ti mismo."\n\nEres el artista de tu propia vida.\n\n🎨 ¿Qué vas a crear hoy?`
+                `La diferencia entre soñar y lograr:\n\n→ Acción\n→ Constancia\n→ Disciplina\n\n💪 Deja de planear.\nEmpieza a ejecutar.\n\n🔥 Tu futuro te espera.`
             ]
         };
 
@@ -188,38 +278,59 @@ class AIService {
 
     generateStrategicHashtags(tema, index) {
         const hashtags = {
-            psicologia: [
-                ['#Psicología', '#SaludMental', '#Autoconocimiento', '#CrecimientoPersonal', '#InteligenciaEmocional'],
-                ['#Mindfulness', '#Terapia', '#BienestarEmocional', '#DesarrolloPersonal', '#MenteSana'],
-                ['#PsicologíaPositiva', '#Conciencia', '#Emociones', '#Autoestima', '#SaludEmocional'],
-                ['#Neurociencia', '#ComportamientoHumano', '#Psique', '#Autoayuda', '#Bienestar'],
-                ['#CarlJung', '#Psicoanálisis', '#TransformaciónPersonal', '#SaludMental', '#Crecimiento'],
-                ['#FilosofíaDeVida', '#Reflexiones', '#DesarrolloHumano', '#Consciencia', '#Sabiduría'],
-                ['#Autoconfianza', '#Empoderamiento', '#SaludMental', '#Resiliencia', '#Fortaleza'],
-                ['#MenteAbierta', '#Flexibilidad', '#Aprendizaje', '#Crecimiento', '#Evolución'],
-                ['#Confianza', '#Autoaceptación', '#Amor Propio', '#SaludMental', '#Bienestar'],
-                ['#Aceptación', '#Transformación', '#SanaciónEmocional', '#Paz', '#Equilibrio']
+            salud_mental: [
+                ['#SaludMental', '#Bienestar', '#Mindfulness', '#Autocuidado', '#MenteSana']
+            ],
+            fitness: [
+                ['#Fitness', '#Gym', '#Workout', '#Transformación', '#FitnessMotivation']
+            ],
+            ia_tecnologia: [
+                ['#IA', '#Tecnología', '#ChatGPT', '#Innovación', '#TechTok']
+            ],
+            comida: [
+                ['#Comida', '#Recetas', '#Cocina', '#FoodTok', '#Gastronomía']
+            ],
+            finanzas: [
+                ['#Finanzas', '#Ahorro', '#Inversión', '#DineroInteligente', '#FinanzasPersonales']
+            ],
+            viajes: [
+                ['#Viajes', '#Travel', '#Aventura', '#Mochilero', '#ViajarBarato']
+            ],
+            moda: [
+                ['#Moda', '#Fashion', '#Outfit', '#Estilo', '#Tendencias2026']
+            ],
+            diy: [
+                ['#DIY', '#Manualidades', '#HazloTuMismo', '#Craft', '#ProyectosDIY']
+            ],
+            mascotas: [
+                ['#Mascotas', '#Perros', '#Gatos', '#PetLovers', '#Animales']
+            ],
+            gaming: [
+                ['#Gaming', '#Gamer', '#Videojuegos', '#Esports', '#GamingCommunity']
+            ],
+            sustentabilidad: [
+                ['#Sustentabilidad', '#Ecológico', '#VidaVerde', '#CuidaElPlaneta', '#EcoFriendly']
+            ],
+            educacion: [
+                ['#Educación', '#Aprender', '#Tutorial', '#Conocimiento', '#Skills2026']
+            ],
+            entretenimiento: [
+                ['#Memes', '#Humor', '#Viral', '#TikTok', '#Entretenimiento']
+            ],
+            emprendimiento: [
+                ['#Emprendimiento', '#Negocios', '#Startup', '#SideHustle', '#Monetizar']
+            ],
+            hogar: [
+                ['#HomeDecor', '#Decoración', '#Hogar', '#InteriorDesign', '#Casa']
             ],
             productividad: [
-                ['#Productividad', '#GestiónDelTiempo', '#Eficiencia', '#Enfoque', '#AltoRendimiento'],
-                ['#ProductividadPersonal', '#HábitosProductivos', '#TiempoEsOro', '#Organización', '#Éxito'],
-                ['#SistemaDeProductividad', '#TrabajoInteligente', '#Resultados', '#Disciplina', '#Logros'],
-                ['#BloqueoDeTiempo', '#GestiónEficaz', '#Prioridades', '#Enfoque', '#Productividad'],
-                ['#ReglaDe2Minutos', '#AcciónInmediata', '#Productividad', '#Eficiencia', '#Momentum']
+                ['#Productividad', '#Eficiencia', '#Organización', '#TimeManagement', '#Hábitos']
             ],
             motivacion: [
-                ['#Motivación', '#Inspiración', '#Éxito', '#CrecimientoPersonal', '#Mentalidad'],
-                ['#MotivaciónDiaria', '#Superación', '#MentalidadDeÉxito', '#Determinación', '#Logros'],
-                ['#Disciplina', '#Constancia', '#Perseverancia', '#Éxito', '#Mentalidad'],
-                ['#AcciónAhora', '#NoExcusas', '#Motivación', '#Determinación', '#Éxito'],
-                ['#SinLímites', '#Potencial', '#Empoderamiento', '#Motivación', '#Transformación']
+                ['#Motivación', '#Inspiración', '#Éxito', '#Mentalidad', '#CrecimientoPersonal']
             ],
             general: [
-                ['#DesarrolloPersonal', '#Crecimiento', '#Motivación', '#Inspiración', '#Cambio'],
-                ['#CrecimientoPersonal', '#TransformaciónPersonal', '#Mentalidad', '#Éxito', '#Vida'],
-                ['#Reflexiones', '#DesarrolloHumano', '#Sabiduría', '#Aprendizaje', '#Evolución'],
-                ['#Transformación', '#Cambio', '#CrecimientoPersonal', '#Evolución', '#Progreso'],
-                ['#CreaciónPersonal', '#Propósito', '#Vida', '#Decisiones', '#Futuro']
+                ['#Viral', '#Trending', '#Contenido', '#RedesSociales', '#2026']
             ]
         };
 
