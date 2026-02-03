@@ -208,7 +208,7 @@ class SocialMediaAutomation {
         }
     }
 
-    // Renderizar posts generados
+    // Renderizar posts generados (VERSIÓN MEJORADA CON NUEVAS FUNCIONALIDADES)
     renderPosts(posts) {
         const postsGrid = document.getElementById('posts-grid');
         const resultsContainer = document.getElementById('results-container');
@@ -225,7 +225,7 @@ class SocialMediaAutomation {
                 </div>
 
                 <div class="post-content">
-                    ${post.contenido}
+                    ${post.contenido.replace(/\n/g, '<br>')}
                 </div>
 
                 <div class="post-hashtags">
@@ -239,6 +239,9 @@ class SocialMediaAutomation {
                     <span class="meta-badge">
                         <i class="fas fa-mobile-alt"></i> ${post.format}
                     </span>
+                    <span class="meta-badge">
+                        <i class="fas fa-font"></i> ${this.countCharacters(post)} caracteres
+                    </span>
                 </div>
 
                 <div class="post-rating" data-index="${index}">
@@ -248,6 +251,15 @@ class SocialMediaAutomation {
                 </div>
 
                 <div class="post-actions">
+                    <button class="btn-copy" data-copy-index="${index}">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                    <button class="btn-edit-post" data-edit-index="${index}">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn-image" data-image-index="${index}">
+                        <i class="fas fa-image"></i> Imagen
+                    </button>
                     <button class="btn-schedule" data-index="${index}">
                         <i class="fas fa-calendar-plus"></i> Programar
                     </button>
@@ -262,7 +274,7 @@ class SocialMediaAutomation {
         this.setupPostEventListeners();
     }
 
-    // Event listeners para posts individuales
+    // Event listeners para posts individuales (ACTUALIZADO CON NUEVAS FUNCIONALIDADES)
     setupPostEventListeners() {
         // Checkboxes de selección
         document.querySelectorAll('.select-checkbox').forEach(checkbox => {
@@ -349,7 +361,254 @@ class SocialMediaAutomation {
                 }
             });
         });
+
+        // ==========================================
+        // NUEVAS FUNCIONALIDADES
+        // ==========================================
+
+        // Botones de copiar
+        document.querySelectorAll('.btn-copy').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.closest('button').dataset.copyIndex);
+                this.copyPostContent(index);
+            });
+        });
+
+        // Botones de editar
+        document.querySelectorAll('.btn-edit-post').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.closest('button').dataset.editIndex);
+                this.editPost(index);
+            });
+        });
+
+        // Botones de generar imagen
+        document.querySelectorAll('.btn-image').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.closest('button').dataset.imageIndex);
+                this.generateImage(index);
+            });
+        });
     }
+
+    // ==========================================
+    // NUEVAS FUNCIONALIDADES - COPIAR, EDITAR, IMÁGENES
+    // ==========================================
+
+    // Copiar contenido completo del post
+    async copyPostContent(index) {
+        const post = this.currentPosts[index];
+        if (!post) return;
+
+        const fullContent = `${post.titulo}\n\n${post.contenido}\n\n${post.hashtags.join(' ')}`;
+
+        try {
+            await navigator.clipboard.writeText(fullContent);
+            this.showNotification('✅ Contenido copiado al portapapeles', 'success');
+            
+            // Feedback visual en el botón
+            const btn = document.querySelector(`[data-copy-index="${index}"]`);
+            if (btn) {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            }
+        } catch (error) {
+            this.showNotification('❌ Error al copiar', 'error');
+        }
+    }
+
+    // Editar post inline
+    editPost(index) {
+        const post = this.currentPosts[index];
+        if (!post) return;
+
+        const card = document.querySelector(`.post-card[data-index="${index}"]`);
+        if (!card) return;
+
+        const contentDiv = card.querySelector('.post-content');
+        const hashtagsDiv = card.querySelector('.post-hashtags');
+        const titleEl = card.querySelector('.post-title');
+
+        // Guardar contenido original
+        card.dataset.originalTitle = post.titulo;
+        card.dataset.originalContent = post.contenido;
+        card.dataset.originalHashtags = JSON.stringify(post.hashtags);
+
+        // Modo edición
+        titleEl.innerHTML = `
+            <input type="text" class="edit-title" value="${post.titulo}" 
+                   style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
+                          padding: 8px; border-radius: 6px; color: var(--text-primary); font-size: 1rem;">
+        `;
+
+        contentDiv.innerHTML = `
+            <textarea class="edit-content" rows="6" 
+                      style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
+                             padding: 12px; border-radius: 6px; color: var(--text-primary); 
+                             font-family: inherit; resize: vertical;">${post.contenido}</textarea>
+        `;
+
+        hashtagsDiv.innerHTML = `
+            <input type="text" class="edit-hashtags" value="${post.hashtags.join(', ')}" 
+                   style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
+                          padding: 8px; border-radius: 6px; color: var(--text-primary);">
+        `;
+
+        // Reemplazar botones con acciones de edición
+        const actionsDiv = card.querySelector('.post-actions');
+        actionsDiv.innerHTML = `
+            <button class="btn-save-edit" data-index="${index}" 
+                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; 
+                           padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; 
+                           font-weight: 600; flex: 1;">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <button class="btn-cancel-edit" data-index="${index}" 
+                    style="background: rgba(239, 68, 68, 0.2); color: #ef4444; 
+                           padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        `;
+
+        // Event listeners
+        card.querySelector('.btn-save-edit').addEventListener('click', () => this.saveEdit(index));
+        card.querySelector('.btn-cancel-edit').addEventListener('click', () => this.cancelEdit(index));
+    }
+
+    // Guardar edición
+    async saveEdit(index) {
+        const card = document.querySelector(`.post-card[data-index="${index}"]`);
+        if (!card) return;
+
+        const newTitle = card.querySelector('.edit-title').value;
+        const newContent = card.querySelector('.edit-content').value;
+        const newHashtags = card.querySelector('.edit-hashtags').value
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag);
+
+        // Actualizar post
+        this.currentPosts[index].titulo = newTitle;
+        this.currentPosts[index].contenido = newContent;
+        this.currentPosts[index].hashtags = newHashtags;
+
+        // Actualizar en backend
+        const post = this.currentPosts[index];
+        if (post.id) {
+            await googleBackend.updatePost(post);
+        }
+
+        // Re-renderizar
+        this.renderPosts(this.currentPosts);
+        this.showNotification('✅ Post actualizado', 'success');
+    }
+
+    // Cancelar edición
+    cancelEdit(index) {
+        this.renderPosts(this.currentPosts);
+    }
+
+    // Contar caracteres
+    countCharacters(post) {
+        return post.titulo.length + post.contenido.length + post.hashtags.join(' ').length;
+    }
+
+    // Generar imagen para post
+    async generateImage(index) {
+        const post = this.currentPosts[index];
+        if (!post) return;
+
+        this.showNotification('🎨 Generando imagen...', 'info');
+
+        try {
+            // Crear canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Dimensiones según formato
+            const dimensions = {
+                vertical: { width: 1080, height: 1920 },
+                square: { width: 1080, height: 1080 },
+                horizontal: { width: 1920, height: 1080 }
+            };
+
+            const dim = dimensions[post.format] || dimensions.square;
+            canvas.width = dim.width;
+            canvas.height = dim.height;
+
+            // Fondo gradiente
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Texto del título
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Wrap text
+            const maxWidth = canvas.width - 200;
+            const lines = this.wrapText(ctx, post.titulo, maxWidth);
+            const lineHeight = 100;
+            const startY = (canvas.height / 2) - ((lines.length - 1) * lineHeight / 2);
+
+            lines.forEach((line, i) => {
+                ctx.fillText(line, canvas.width / 2, startY + (i * lineHeight));
+            });
+
+            // Marca de agua
+            ctx.font = '30px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.textAlign = 'center';
+            ctx.fillText('@M20TZ', canvas.width / 2, canvas.height - 50);
+
+            // Convertir a blob y descargar
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `post-${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                this.showNotification('✅ Imagen generada y descargada', 'success');
+            });
+
+        } catch (error) {
+            console.error('Error generando imagen:', error);
+            this.showNotification('❌ Error al generar imagen', 'error');
+        }
+    }
+
+    // Función auxiliar para wrap text
+    wrapText(ctx, text, maxWidth) {
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = words[0];
+
+        for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const width = ctx.measureText(currentLine + ' ' + word).width;
+            if (width < maxWidth) {
+                currentLine += ' ' + word;
+            } else {
+                lines.push(currentLine);
+                currentLine = word;
+            }
+        }
+        lines.push(currentLine);
+        return lines;
+    }
+
+    // ==========================================
+    // FIN NUEVAS FUNCIONALIDADES
+    // ==========================================
 
     // Seleccionar todos los posts
     selectAllPosts() {
