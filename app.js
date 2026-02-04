@@ -107,6 +107,39 @@ class SocialMediaAutomation {
             confirmScheduleBtn.addEventListener('click', () => this.confirmSchedule());
         }
 
+        // ==========================================
+        // SELECTOR DE NICHOS POPULARES (NUEVO)
+        // Usando event delegation para máxima compatibilidad
+        // ==========================================
+        const self = this; // Guardar referencia de 'this'
+        document.addEventListener('click', function(e) {
+            // Verificar si el click fue en un botón de nicho
+            if (e.target.classList.contains('niche-btn') || e.target.closest('.niche-btn')) {
+                const button = e.target.classList.contains('niche-btn') ? e.target : e.target.closest('.niche-btn');
+                const nicheText = button.dataset.niche;
+                
+                console.log(`✅ Click en nicho: ${nicheText}`);
+                
+                // Remover active de todos los botones
+                document.querySelectorAll('.niche-btn').forEach(b => b.classList.remove('active'));
+                
+                // Activar el botón seleccionado
+                button.classList.add('active');
+                
+                // Poner el texto en el textarea de idea
+                const ideaInput = document.getElementById('idea-input');
+                if (ideaInput) {
+                    ideaInput.value = nicheText;
+                    ideaInput.focus();
+                    
+                    // Feedback visual
+                    self.showNotification(`✅ Nicho seleccionado: ${button.textContent.trim()}`, 'success');
+                } else {
+                    console.error('❌ No se encontró el textarea #idea-input');
+                }
+            }
+        });
+
         // Conectar redes sociales
         document.querySelectorAll('.social-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
