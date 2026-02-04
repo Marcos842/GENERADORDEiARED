@@ -1,4 +1,4 @@
-// ========== APLICACIÓN PRINCIPAL ==========
+// ========== APLICACIÓN PRINCIPAL - VERSION VIRAL PRO ==========
 
 class SocialMediaAutomation {
     constructor() {
@@ -9,7 +9,7 @@ class SocialMediaAutomation {
 
     // Inicializar aplicación
     init() {
-        console.log('🚀 Iniciando Social Media Automation...');
+        console.log('🚀 Iniciando Social Media Automation PRO...');
         
         // Inicializar servicios
         googleBackend.init();
@@ -27,7 +27,7 @@ class SocialMediaAutomation {
         // Actualizar estadísticas de uso
         this.updateUsageStats();
 
-        console.log('✅ Aplicación lista');
+        console.log('✅ Aplicación lista - Modo VIRAL activado');
     }
 
     // Configurar event listeners
@@ -108,34 +108,24 @@ class SocialMediaAutomation {
         }
 
         // ==========================================
-        // SELECTOR DE NICHOS POPULARES (NUEVO)
-        // Usando event delegation para máxima compatibilidad
+        // SELECTOR DE NICHOS POPULARES
         // ==========================================
-        const self = this; // Guardar referencia de 'this'
+        const self = this;
         document.addEventListener('click', function(e) {
-            // Verificar si el click fue en un botón de nicho
             if (e.target.classList.contains('niche-btn') || e.target.closest('.niche-btn')) {
                 const button = e.target.classList.contains('niche-btn') ? e.target : e.target.closest('.niche-btn');
                 const nicheText = button.dataset.niche;
                 
                 console.log(`✅ Click en nicho: ${nicheText}`);
                 
-                // Remover active de todos los botones
                 document.querySelectorAll('.niche-btn').forEach(b => b.classList.remove('active'));
-                
-                // Activar el botón seleccionado
                 button.classList.add('active');
                 
-                // Poner el texto en el textarea de idea
                 const ideaInput = document.getElementById('idea-input');
                 if (ideaInput) {
                     ideaInput.value = nicheText;
                     ideaInput.focus();
-                    
-                    // Feedback visual
                     self.showNotification(`✅ Nicho seleccionado: ${button.textContent.trim()}`, 'success');
-                } else {
-                    console.error('❌ No se encontró el textarea #idea-input');
                 }
             }
         });
@@ -151,13 +141,11 @@ class SocialMediaAutomation {
 
     // Cambiar de sección
     switchSection(sectionName) {
-        // Actualizar navegación
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
 
-        // Mostrar sección
         document.querySelectorAll('.section').forEach(section => {
             section.classList.remove('active');
         });
@@ -165,7 +153,6 @@ class SocialMediaAutomation {
 
         this.currentSection = sectionName;
 
-        // Renderizar contenido específico de la sección
         if (sectionName === 'calendar') {
             calendar.renderCalendar();
         } else if (sectionName === 'analytics') {
@@ -185,7 +172,6 @@ class SocialMediaAutomation {
             return;
         }
 
-        // Obtener opciones
         const quantity = parseInt(document.getElementById('post-quantity').value);
         const tone = document.getElementById('tone-select').value;
         
@@ -199,18 +185,15 @@ class SocialMediaAutomation {
             return;
         }
 
-        // Mostrar loading
         this.showLoading(true);
 
         try {
-            // Generar posts con IA
             const posts = await aiService.generateContent(idea, {
                 quantity,
                 tone,
                 formats
             });
 
-            // Guardar en base de datos (Google Sheets vía Apps Script)
             for (const post of posts) {
                 await googleBackend.savePost({
                     ...post,
@@ -222,13 +205,10 @@ class SocialMediaAutomation {
 
             this.currentPosts = posts;
             this.renderPosts(posts);
-            
-            // Actualizar estadísticas
             this.updateGenerationStats();
             
             this.showNotification(CONFIG.MESSAGES.SUCCESS_GENERATE, 'success');
             
-            // Scroll a resultados
             document.getElementById('results-container').scrollIntoView({ 
                 behavior: 'smooth' 
             });
@@ -241,7 +221,9 @@ class SocialMediaAutomation {
         }
     }
 
-    // Renderizar posts generados (VERSIÓN MEJORADA CON NUEVAS FUNCIONALIDADES)
+    // ==========================================
+    // RENDERIZAR POSTS - VERSION VIRAL PRO
+    // ==========================================
     renderPosts(posts) {
         const postsGrid = document.getElementById('posts-grid');
         const resultsContainer = document.getElementById('results-container');
@@ -251,20 +233,57 @@ class SocialMediaAutomation {
         resultsContainer.classList.remove('hidden');
 
         postsGrid.innerHTML = posts.map((post, index) => `
-            <div class="post-card" data-index="${index}">
+            <div class="post-card viral-card" data-index="${index}">
+                <!-- HEADER CON CHECKBOX -->
                 <div class="post-header">
                     <h3 class="post-title">${post.titulo}</h3>
                     <input type="checkbox" class="select-checkbox" data-index="${index}">
                 </div>
 
+                <!-- ========================================
+                     NUEVO: INDICADORES VIRALES
+                     ======================================== -->
+                <div class="viral-indicators">
+                    <div class="viral-score-badge ${this.getViralScoreClass(post.viralScore || 0)}">
+                        <i class="fas fa-bolt"></i>
+                        <span>VIRAL ${post.viralScore || 0}%</span>
+                    </div>
+                    
+                    <div class="controversy-badge ${this.getControversyClass(post.controversyLevel || 'bajo')}">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>${(post.controversyLevel || 'bajo').toUpperCase()}</span>
+                    </div>
+                    
+                    ${post.bestTimeToPost ? `
+                        <div class="time-badge">
+                            <i class="fas fa-clock"></i>
+                            <span>${post.bestTimeToPost}</span>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- CONTENIDO -->
                 <div class="post-content">
                     ${post.contenido.replace(/\n/g, '<br>')}
                 </div>
 
+                <!-- HASHTAGS -->
                 <div class="post-hashtags">
                     ${post.hashtags.map(tag => `<span class="hashtag">${tag}</span>`).join('')}
                 </div>
 
+                <!-- ========================================
+                     NUEVO: TRIGGER WORDS
+                     ======================================== -->
+                ${post.triggerWords && post.triggerWords.length > 0 ? `
+                    <div class="trigger-words">
+                        <i class="fas fa-fire"></i>
+                        <span class="trigger-label">Trigger Words:</span>
+                        ${post.triggerWords.map(word => `<span class="trigger-word">${word}</span>`).join('')}
+                    </div>
+                ` : ''}
+
+                <!-- META INFO -->
                 <div class="post-meta">
                     <span class="meta-badge">
                         <i class="fas fa-smile"></i> ${post.tone}
@@ -277,12 +296,88 @@ class SocialMediaAutomation {
                     </span>
                 </div>
 
+                <!-- ========================================
+                     NUEVO: COMENTARIOS PREDICHOS
+                     ======================================== -->
+                ${post.predictedComments ? `
+                    <div class="predicted-comments">
+                        <button class="toggle-comments-btn" data-index="${index}">
+                            <i class="fas fa-comment-dots"></i>
+                            Ver Comentarios Predichos
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="comments-panel hidden" id="comments-${index}">
+                            <div class="comments-section">
+                                <h4 class="comments-title positive">
+                                    <i class="fas fa-thumbs-up"></i> Positivos
+                                </h4>
+                                ${post.predictedComments.positive.map(comment => `
+                                    <div class="comment-item positive">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>${comment}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <div class="comments-section">
+                                <h4 class="comments-title negative">
+                                    <i class="fas fa-thumbs-down"></i> Negativos
+                                </h4>
+                                ${post.predictedComments.negative.map(comment => `
+                                    <div class="comment-item negative">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>${comment}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <div class="comments-section">
+                                <h4 class="comments-title constructive">
+                                    <i class="fas fa-lightbulb"></i> Constructivos
+                                </h4>
+                                ${post.predictedComments.constructive.map(comment => `
+                                    <div class="comment-item constructive">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>${comment}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- ========================================
+                     NUEVO: VARIACIONES A/B
+                     ======================================== -->
+                ${post.variations && post.variations.length > 1 ? `
+                    <div class="variations-section">
+                        <button class="toggle-variations-btn" data-index="${index}">
+                            <i class="fas fa-layer-group"></i>
+                            Ver ${post.variations.length} Variaciones A/B
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="variations-panel hidden" id="variations-${index}">
+                            ${post.variations.map((variation, vIndex) => `
+                                <div class="variation-item">
+                                    <span class="variation-label">Variación ${vIndex + 1}</span>
+                                    <p class="variation-hook">${variation.hook}</p>
+                                    <button class="use-variation-btn" data-post-index="${index}" data-var-index="${vIndex}">
+                                        <i class="fas fa-check"></i> Usar esta
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- RATING -->
                 <div class="post-rating" data-index="${index}">
                     ${[1, 2, 3, 4, 5].map(rating => `
                         <i class="fas fa-star star" data-rating="${rating}"></i>
                     `).join('')}
                 </div>
 
+                <!-- ACCIONES -->
                 <div class="post-actions">
                     <button class="btn-copy" data-copy-index="${index}">
                         <i class="fas fa-copy"></i> Copiar
@@ -303,13 +398,30 @@ class SocialMediaAutomation {
             </div>
         `).join('');
 
-        // Event listeners para cada post
         this.setupPostEventListeners();
+        this.addViralStyles();
     }
 
-    // Event listeners para posts individuales (ACTUALIZADO CON NUEVAS FUNCIONALIDADES)
+    // ==========================================
+    // FUNCIONES AUXILIARES PARA BADGES
+    // ==========================================
+    getViralScoreClass(score) {
+        if (score >= 80) return 'viral-high';
+        if (score >= 60) return 'viral-medium';
+        return 'viral-low';
+    }
+
+    getControversyClass(level) {
+        if (level === 'alto') return 'controversy-high';
+        if (level === 'medio') return 'controversy-medium';
+        return 'controversy-low';
+    }
+
+    // ==========================================
+    // EVENT LISTENERS PARA POSTS
+    // ==========================================
     setupPostEventListeners() {
-        // Checkboxes de selección
+        // Checkboxes
         document.querySelectorAll('.select-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', (e) => {
                 const index = parseInt(e.target.dataset.index);
@@ -325,7 +437,7 @@ class SocialMediaAutomation {
             });
         });
 
-        // Sistema de rating con estrellas
+        // Rating con estrellas
         document.querySelectorAll('.post-rating').forEach(ratingDiv => {
             const stars = ratingDiv.querySelectorAll('.star');
             
@@ -334,7 +446,6 @@ class SocialMediaAutomation {
                     const rating = parseInt(e.target.dataset.rating);
                     const index = parseInt(ratingDiv.dataset.index);
                     
-                    // Actualizar visualmente
                     stars.forEach((s, i) => {
                         if (i < rating) {
                             s.classList.add('active');
@@ -343,7 +454,6 @@ class SocialMediaAutomation {
                         }
                     });
 
-                    // Guardar rating en Google Backend
                     const post = this.currentPosts[index];
                     if (post && post.id) {
                         await googleBackend.updatePostRating(post.id, rating);
@@ -351,7 +461,6 @@ class SocialMediaAutomation {
                     }
                 });
 
-                // Hover effect
                 star.addEventListener('mouseenter', (e) => {
                     const rating = parseInt(e.target.dataset.rating);
                     stars.forEach((s, i) => {
@@ -368,6 +477,49 @@ class SocialMediaAutomation {
                         }
                     });
                 });
+            });
+        });
+
+        // ==========================================
+        // NUEVOS EVENT LISTENERS
+        // ==========================================
+
+        // Toggle comentarios predichos
+        document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = e.target.closest('button').dataset.index;
+                const panel = document.getElementById(`comments-${index}`);
+                const icon = btn.querySelector('.fa-chevron-down');
+                
+                panel.classList.toggle('hidden');
+                icon.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+        });
+
+        // Toggle variaciones
+        document.querySelectorAll('.toggle-variations-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = e.target.closest('button').dataset.index;
+                const panel = document.getElementById(`variations-${index}`);
+                const icon = btn.querySelector('.fa-chevron-down');
+                
+                panel.classList.toggle('hidden');
+                icon.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+        });
+
+        // Usar variación
+        document.querySelectorAll('.use-variation-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const postIndex = parseInt(e.target.closest('button').dataset.postIndex);
+                const varIndex = parseInt(e.target.closest('button').dataset.varIndex);
+                
+                const post = this.currentPosts[postIndex];
+                const variation = post.variations[varIndex];
+                
+                post.titulo = variation.hook;
+                this.renderPosts(this.currentPosts);
+                this.showNotification(`✅ Variación ${varIndex + 1} aplicada`, 'success');
             });
         });
 
@@ -395,10 +547,6 @@ class SocialMediaAutomation {
             });
         });
 
-        // ==========================================
-        // NUEVAS FUNCIONALIDADES
-        // ==========================================
-
         // Botones de copiar
         document.querySelectorAll('.btn-copy').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -425,10 +573,229 @@ class SocialMediaAutomation {
     }
 
     // ==========================================
-    // NUEVAS FUNCIONALIDADES - COPIAR, EDITAR, IMÁGENES
+    // ESTILOS VIRALES
+    // ==========================================
+    addViralStyles() {
+        if (document.getElementById('viral-styles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'viral-styles';
+        style.textContent = `
+            /* INDICADORES VIRALES */
+            .viral-indicators {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-bottom: 1rem;
+            }
+
+            .viral-score-badge, .controversy-badge, .time-badge {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            .viral-high {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+            }
+
+            .viral-medium {
+                background: linear-gradient(135deg, #f59e0b, #d97706);
+                color: white;
+            }
+
+            .viral-low {
+                background: linear-gradient(135deg, #6b7280, #4b5563);
+                color: white;
+            }
+
+            .controversy-high {
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+            }
+
+            .controversy-medium {
+                background: linear-gradient(135deg, #f59e0b, #d97706);
+                color: white;
+            }
+
+            .controversy-low {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+            }
+
+            .time-badge {
+                background: rgba(99, 102, 241, 0.2);
+                color: #818cf8;
+                border: 1px solid rgba(99, 102, 241, 0.3);
+            }
+
+            /* TRIGGER WORDS */
+            .trigger-words {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin: 1rem 0;
+                padding: 12px;
+                background: rgba(239, 68, 68, 0.1);
+                border-left: 4px solid #ef4444;
+                border-radius: 6px;
+            }
+
+            .trigger-label {
+                font-weight: 600;
+                color: #ef4444;
+            }
+
+            .trigger-word {
+                background: rgba(239, 68, 68, 0.2);
+                color: #ef4444;
+                padding: 4px 10px;
+                border-radius: 12px;
+                font-size: 0.85rem;
+                font-weight: 500;
+            }
+
+            /* COMENTARIOS PREDICHOS */
+            .predicted-comments {
+                margin-top: 1rem;
+            }
+
+            .toggle-comments-btn, .toggle-variations-btn {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px;
+                background: rgba(99, 102, 241, 0.1);
+                border: 1px solid rgba(99, 102, 241, 0.3);
+                border-radius: 8px;
+                color: #818cf8;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .toggle-comments-btn:hover, .toggle-variations-btn:hover {
+                background: rgba(99, 102, 241, 0.2);
+            }
+
+            .comments-panel, .variations-panel {
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(0, 0, 0, 0.3);
+                border-radius: 8px;
+                animation: slideDown 0.3s ease;
+            }
+
+            .comments-section {
+                margin-bottom: 1rem;
+            }
+
+            .comments-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .comments-title.positive { color: #10b981; }
+            .comments-title.negative { color: #ef4444; }
+            .comments-title.constructive { color: #f59e0b; }
+
+            .comment-item {
+                display: flex;
+                align-items: start;
+                gap: 8px;
+                padding: 8px;
+                margin-bottom: 6px;
+                border-radius: 6px;
+                font-size: 0.85rem;
+            }
+
+            .comment-item.positive {
+                background: rgba(16, 185, 129, 0.1);
+                border-left: 3px solid #10b981;
+            }
+
+            .comment-item.negative {
+                background: rgba(239, 68, 68, 0.1);
+                border-left: 3px solid #ef4444;
+            }
+
+            .comment-item.constructive {
+                background: rgba(245, 158, 11, 0.1);
+                border-left: 3px solid #f59e0b;
+            }
+
+            /* VARIACIONES */
+            .variation-item {
+                background: rgba(99, 102, 241, 0.1);
+                border: 1px solid rgba(99, 102, 241, 0.3);
+                border-radius: 8px;
+                padding: 1rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .variation-label {
+                display: inline-block;
+                background: rgba(99, 102, 241, 0.3);
+                color: #818cf8;
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .variation-hook {
+                margin: 8px 0;
+                color: var(--text-primary);
+                font-weight: 500;
+            }
+
+            .use-variation-btn {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .use-variation-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // ==========================================
+    // FUNCIONES EXISTENTES (SIN CAMBIOS)
     // ==========================================
 
-    // Copiar contenido completo del post
     async copyPostContent(index) {
         const post = this.currentPosts[index];
         if (!post) return;
@@ -439,7 +806,6 @@ class SocialMediaAutomation {
             await navigator.clipboard.writeText(fullContent);
             this.showNotification('✅ Contenido copiado al portapapeles', 'success');
             
-            // Feedback visual en el botón
             const btn = document.querySelector(`[data-copy-index="${index}"]`);
             if (btn) {
                 const originalHTML = btn.innerHTML;
@@ -453,7 +819,6 @@ class SocialMediaAutomation {
         }
     }
 
-    // Editar post inline
     editPost(index) {
         const post = this.currentPosts[index];
         if (!post) return;
@@ -465,12 +830,10 @@ class SocialMediaAutomation {
         const hashtagsDiv = card.querySelector('.post-hashtags');
         const titleEl = card.querySelector('.post-title');
 
-        // Guardar contenido original
         card.dataset.originalTitle = post.titulo;
         card.dataset.originalContent = post.contenido;
         card.dataset.originalHashtags = JSON.stringify(post.hashtags);
 
-        // Modo edición
         titleEl.innerHTML = `
             <input type="text" class="edit-title" value="${post.titulo}" 
                    style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
@@ -490,7 +853,6 @@ class SocialMediaAutomation {
                           padding: 8px; border-radius: 6px; color: var(--text-primary);">
         `;
 
-        // Reemplazar botones con acciones de edición
         const actionsDiv = card.querySelector('.post-actions');
         actionsDiv.innerHTML = `
             <button class="btn-save-edit" data-index="${index}" 
@@ -506,12 +868,10 @@ class SocialMediaAutomation {
             </button>
         `;
 
-        // Event listeners
         card.querySelector('.btn-save-edit').addEventListener('click', () => this.saveEdit(index));
         card.querySelector('.btn-cancel-edit').addEventListener('click', () => this.cancelEdit(index));
     }
 
-    // Guardar edición
     async saveEdit(index) {
         const card = document.querySelector(`.post-card[data-index="${index}"]`);
         if (!card) return;
@@ -523,33 +883,27 @@ class SocialMediaAutomation {
             .map(tag => tag.trim())
             .filter(tag => tag);
 
-        // Actualizar post
         this.currentPosts[index].titulo = newTitle;
         this.currentPosts[index].contenido = newContent;
         this.currentPosts[index].hashtags = newHashtags;
 
-        // Actualizar en backend
         const post = this.currentPosts[index];
         if (post.id) {
             await googleBackend.updatePost(post);
         }
 
-        // Re-renderizar
         this.renderPosts(this.currentPosts);
         this.showNotification('✅ Post actualizado', 'success');
     }
 
-    // Cancelar edición
     cancelEdit(index) {
         this.renderPosts(this.currentPosts);
     }
 
-    // Contar caracteres
     countCharacters(post) {
         return post.titulo.length + post.contenido.length + post.hashtags.join(' ').length;
     }
 
-    // Generar imagen para post
     async generateImage(index) {
         const post = this.currentPosts[index];
         if (!post) return;
@@ -557,11 +911,9 @@ class SocialMediaAutomation {
         this.showNotification('🎨 Generando imagen...', 'info');
 
         try {
-            // Crear canvas
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
-            // Dimensiones según formato
             const dimensions = {
                 vertical: { width: 1080, height: 1920 },
                 square: { width: 1080, height: 1080 },
@@ -572,20 +924,17 @@ class SocialMediaAutomation {
             canvas.width = dim.width;
             canvas.height = dim.height;
 
-            // Fondo gradiente
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             gradient.addColorStop(0, '#667eea');
             gradient.addColorStop(1, '#764ba2');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Texto del título
             ctx.fillStyle = 'white';
             ctx.font = 'bold 80px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            // Wrap text
             const maxWidth = canvas.width - 200;
             const lines = this.wrapText(ctx, post.titulo, maxWidth);
             const lineHeight = 100;
@@ -595,13 +944,11 @@ class SocialMediaAutomation {
                 ctx.fillText(line, canvas.width / 2, startY + (i * lineHeight));
             });
 
-            // Marca de agua
             ctx.font = '30px Arial';
             ctx.fillStyle = 'rgba(255,255,255,0.7)';
             ctx.textAlign = 'center';
             ctx.fillText('@M20TZ', canvas.width / 2, canvas.height - 50);
 
-            // Convertir a blob y descargar
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -609,7 +956,6 @@ class SocialMediaAutomation {
                 a.download = `post-${Date.now()}.png`;
                 a.click();
                 URL.revokeObjectURL(url);
-
                 this.showNotification('✅ Imagen generada y descargada', 'success');
             });
 
@@ -619,7 +965,6 @@ class SocialMediaAutomation {
         }
     }
 
-    // Función auxiliar para wrap text
     wrapText(ctx, text, maxWidth) {
         const words = text.split(' ');
         const lines = [];
@@ -639,11 +984,6 @@ class SocialMediaAutomation {
         return lines;
     }
 
-    // ==========================================
-    // FIN NUEVAS FUNCIONALIDADES
-    // ==========================================
-
-    // Seleccionar todos los posts
     selectAllPosts() {
         const checkboxes = document.querySelectorAll('.select-checkbox');
         const allSelected = this.selectedPosts.size === checkboxes.length;
@@ -667,7 +1007,6 @@ class SocialMediaAutomation {
             : '<i class="fas fa-times"></i> Deseleccionar Todo';
     }
 
-    // Programar posts seleccionados
     scheduleSelectedPosts() {
         if (this.selectedPosts.size === 0) {
             this.showNotification('⚠️ Selecciona al menos un post', 'warning');
@@ -677,19 +1016,16 @@ class SocialMediaAutomation {
         this.openModal();
     }
 
-    // Programar un post individual
     schedulePost(index) {
         this.selectedPosts.clear();
         this.selectedPosts.add(index);
         this.openModal();
     }
 
-    // Abrir modal de programación
     openModal() {
         const modal = document.getElementById('schedule-modal');
         modal.classList.remove('hidden');
 
-        // Setear fecha mínima (hoy)
         const datetimeInput = document.getElementById('schedule-datetime');
         const now = new Date();
         const minDate = now.toISOString().slice(0, 16);
@@ -697,13 +1033,11 @@ class SocialMediaAutomation {
         datetimeInput.value = minDate;
     }
 
-    // Cerrar modal
     closeModal() {
         const modal = document.getElementById('schedule-modal');
         modal.classList.add('hidden');
     }
 
-    // Confirmar programación
     async confirmSchedule() {
         const datetime = document.getElementById('schedule-datetime').value;
         const platforms = Array.from(document.querySelectorAll('.platform-check:checked'))
@@ -719,7 +1053,6 @@ class SocialMediaAutomation {
             return;
         }
 
-        // Programar cada post seleccionado
         for (const index of this.selectedPosts) {
             const post = this.currentPosts[index];
             
@@ -738,7 +1071,6 @@ class SocialMediaAutomation {
         this.closeModal();
         this.selectedPosts.clear();
         
-        // Actualizar checkboxes
         document.querySelectorAll('.select-checkbox').forEach(cb => {
             cb.checked = false;
         });
@@ -747,17 +1079,14 @@ class SocialMediaAutomation {
         });
     }
 
-    // Renderizar analíticas
     async renderAnalytics() {
         const analytics = await googleBackend.getAnalytics();
 
-        // Actualizar stats cards
         document.getElementById('total-posts').textContent = analytics.totalPosts;
         document.getElementById('avg-rating').textContent = analytics.avgRating;
         document.getElementById('avg-engagement').textContent = analytics.avgEngagement;
         document.getElementById('best-time').textContent = analytics.bestTime;
 
-        // Renderizar top posts
         const topPostsList = document.getElementById('top-posts-list');
         if (analytics.topPosts.length === 0) {
             topPostsList.innerHTML = '<p class="empty-state">No hay posts calificados aún</p>';
@@ -777,47 +1106,8 @@ class SocialMediaAutomation {
                     </div>
                 </div>
             `).join('');
-
-            // Agregar estilos para top posts
-            if (!document.getElementById('top-post-styles')) {
-                const style = document.createElement('style');
-                style.id = 'top-post-styles';
-                style.textContent = `
-                    .top-post-item {
-                        background: var(--dark-bg);
-                        border: 1px solid var(--border-color);
-                        border-radius: 8px;
-                        padding: 1rem;
-                        margin-bottom: 1rem;
-                    }
-                    .top-post-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: start;
-                        margin-bottom: 0.5rem;
-                    }
-                    .top-post-header h4 {
-                        color: var(--primary-color);
-                        font-size: 1rem;
-                    }
-                    .top-post-rating {
-                        font-size: 1.2rem;
-                    }
-                    .top-post-content {
-                        color: var(--text-secondary);
-                        margin-bottom: 0.5rem;
-                        font-size: 0.9rem;
-                    }
-                    .top-post-meta {
-                        display: flex;
-                        gap: 8px;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
         }
 
-        // Renderizar patrones detectados
         const patternsList = document.getElementById('patterns-list');
         if (analytics.patterns.length === 0) {
             patternsList.innerHTML = '<p class="empty-state">Genera más posts para que la IA aprenda tus preferencias</p>';
@@ -828,37 +1118,9 @@ class SocialMediaAutomation {
                     <p>${pattern}</p>
                 </div>
             `).join('');
-
-            // Agregar estilos para patrones
-            if (!document.getElementById('pattern-styles')) {
-                const style = document.createElement('style');
-                style.id = 'pattern-styles';
-                style.textContent = `
-                    .pattern-item {
-                        background: var(--dark-bg);
-                        border-left: 4px solid var(--primary-color);
-                        padding: 1rem;
-                        margin-bottom: 1rem;
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-                        border-radius: 4px;
-                    }
-                    .pattern-item i {
-                        color: var(--primary-color);
-                        font-size: 1.5rem;
-                    }
-                    .pattern-item p {
-                        margin: 0;
-                        color: var(--text-primary);
-                    }
-                `;
-                document.head.appendChild(style);
-            }
         }
     }
 
-    // Guardar API Keys
     saveAPIKeys() {
         const config = {
             openai_key: document.getElementById('openai-key').value,
@@ -870,7 +1132,6 @@ class SocialMediaAutomation {
 
         saveConfig(config);
         
-        // Reinicializar servicios
         googleBackend.init();
         aiService.init();
 
@@ -878,7 +1139,6 @@ class SocialMediaAutomation {
         this.updateUsageStats();
     }
 
-    // Cargar configuración guardada
     loadSavedConfig() {
         const config = getStoredConfig();
         
@@ -899,9 +1159,7 @@ class SocialMediaAutomation {
         }
     }
 
-    // Actualizar estadísticas de uso
     updateUsageStats() {
-        // Posts generados hoy
         const posts = googleBackend.getFromLocalStorage();
         const today = new Date().toDateString();
         const postsToday = posts.filter(p => {
@@ -914,7 +1172,6 @@ class SocialMediaAutomation {
             postsTodayEl.textContent = postsToday;
         }
 
-        // Última generación
         const lastGenEl = document.getElementById('last-generation');
         if (lastGenEl && posts.length > 0) {
             const lastPost = posts[0];
@@ -923,7 +1180,6 @@ class SocialMediaAutomation {
             lastGenEl.textContent = timeAgo;
         }
 
-        // Tipo de almacenamiento
         const storageTypeEl = document.getElementById('storage-type');
         if (storageTypeEl) {
             const config = getStoredConfig();
@@ -931,13 +1187,11 @@ class SocialMediaAutomation {
         }
     }
 
-    // Actualizar stats después de generar
     updateGenerationStats() {
         const lastGen = localStorage.getItem('last_generation_date');
         const newDate = new Date().toISOString();
         localStorage.setItem('last_generation_date', newDate);
 
-        // Contar posts de hoy
         const postsCountToday = localStorage.getItem('posts_count_today');
         const today = new Date().toDateString();
         const lastCountDate = localStorage.getItem('last_count_date');
@@ -951,7 +1205,6 @@ class SocialMediaAutomation {
         }
     }
 
-    // Calcular tiempo transcurrido
     getTimeAgo(date) {
         const now = new Date();
         const diff = now - date;
@@ -965,7 +1218,6 @@ class SocialMediaAutomation {
         return `Hace ${days}d`;
     }
 
-    // Borrar todos los datos
     clearAllData() {
         const confirmed = confirm(
             '⚠️ ADVERTENCIA\n\n' +
@@ -984,7 +1236,6 @@ class SocialMediaAutomation {
                 localStorage.clear();
                 this.showNotification('🗑️ Todos los datos han sido eliminados', 'success');
                 
-                // Recargar página
                 setTimeout(() => {
                     window.location.reload();
                 }, 1500);
@@ -992,7 +1243,6 @@ class SocialMediaAutomation {
         }
     }
 
-    // Conectar redes sociales
     connectSocialMedia(platform) {
         const platformNames = {
             instagram: 'Instagram',
@@ -1006,11 +1256,9 @@ class SocialMediaAutomation {
             'info'
         );
 
-        // TODO: Implementar OAuth para cada plataforma
         console.log(`Conectando con ${platform}...`);
     }
 
-    // Mostrar/ocultar loading
     showLoading(show) {
         const loadingState = document.getElementById('loading-state');
         const generateBtn = document.getElementById('generate-btn');
@@ -1026,14 +1274,11 @@ class SocialMediaAutomation {
         }
     }
 
-    // Mostrar notificación
     showNotification(message, type = 'info') {
-        // Crear elemento de notificación
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
 
-        // Agregar estilos si no existen
         if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
             style.id = 'notification-styles';
@@ -1091,7 +1336,6 @@ class SocialMediaAutomation {
 
         document.body.appendChild(notification);
 
-        // Auto-remover después de 3 segundos
         setTimeout(() => {
             notification.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => {
@@ -1100,15 +1344,13 @@ class SocialMediaAutomation {
         }, 3000);
     }
 
-    // Renderizar estado inicial
     renderInitialState() {
-        // Mostrar mensaje de bienvenida si es primera vez
         const isFirstTime = !localStorage.getItem('has_visited');
         
         if (isFirstTime) {
             localStorage.setItem('has_visited', 'true');
             setTimeout(() => {
-                this.showNotification('👋 ¡Bienvenido a Social Media AI Generator!', 'info');
+                this.showNotification('👋 ¡Bienvenido a Social Media AI Generator PRO!', 'info');
                 setTimeout(() => {
                     this.showNotification('💡 Configura tus APIs en Configuración para empezar', 'info');
                 }, 3500);
@@ -1120,12 +1362,10 @@ class SocialMediaAutomation {
 // ========== INICIALIZAR APLICACIÓN ==========
 const app = new SocialMediaAutomation();
 
-// Esperar a que el DOM esté listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => app.init());
 } else {
     app.init();
 }
 
-// Exponer app globalmente para debugging
 window.app = app;
